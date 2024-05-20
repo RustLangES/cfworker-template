@@ -7,7 +7,7 @@ fn start() {
     // Custom panic
     #[cfg(target_arch = "wasm32")]
     std::panic::set_hook(Box::new(|info: &std::panic::PanicInfo| {
-        console_error!("{info}")
+        worker::console_error!("{info}")
     }));
 }
 
@@ -31,12 +31,6 @@ fn start() {
 //
 // #[event(fetch)]
 // pub async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
-//     // Custom panic
-//     #[cfg(target_arch = "wasm32")]
-//     std::panic::set_hook(Box::new(|info: &std::panic::PanicInfo| {
-//         console_error!("{info}")
-//     }));
-// 
 //     Router::new()
 //         .run(req, env)
 //         .await

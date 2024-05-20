@@ -13,6 +13,7 @@ This is a template to get started with Cloudflare workers written in Rust .
 - Fetch events set up
 - Custom panic configured (using the log provided by Cloudflare)
 - Automatic Deploy with GitHub Actions
+- Nix environment for comfortable working
 
 ## Configuration
 

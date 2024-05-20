@@ -1,0 +1,7 @@
+/target
+/build
+/node_modules
+/.wrangler
+**/*.rs.bk
+wasm-pack.log
+.dev.vars

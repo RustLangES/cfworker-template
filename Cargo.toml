@@ -1,0 +1,25 @@
+[package]
+name = "cfworker-template"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+worker = "0.3"
+# If you need a worker listening cloudflare queue
+# worker = { version = "0.3", features = ["queue"]}
+# serde = { version = "1", features = ["serde_derive"] }
+
+# Remove commentary if you need
+# serde_json = "1"
+# time = { version = "0.3.34", features = ["wasm-bindgen"] }
+# serde = { version = "1", features = ["serde_derive"] }
+# reqwest = { version = "0.12", default-features = false, features = ["json"] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+strip = true
+codegen-units = 1

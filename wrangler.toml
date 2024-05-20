@@ -1,0 +1,26 @@
+name = "cfworker-template"
+workers_dev = true
+main = "build/worker/shim.mjs"
+compatibility_date = "2024-03-14"
+
+# Docs: https://developers.cloudflare.com/workers/configuration/routing/routes/
+# routes = [
+#     { pattern = "subdomain.example.com/*", zone_name = "example.com" },
+# ]
+
+[build]
+command = "worker-build --release"
+
+[[rules]]
+globs = ["**/*.wasm"]
+type = "CompiledWasm"
+fallthrough = false
+
+# Cron Triggers
+# Docs: https://developers.cloudflare.com/workers/platform/triggers/cron-triggers/
+# Configuration: https://developers.cloudflare.com/workers/wrangler/configuration/#triggers
+# [triggers]
+# crons = ["0 22 * * *"]
+
+# Docs: https://developers.cloudflare.com/workers/configuration/environment-variables/
+[env.local.vars]

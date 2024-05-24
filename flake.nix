@@ -18,14 +18,14 @@
   # Iterate over Arm, x86 for MacOs 🍎 and Linux 🐧
     flake-utils.lib.eachSystem (flake-utils.lib.defaultSystems) (
       system: let
-        dailyChallengeBundle = import ./. {
+        bundle = import ./. {
           inherit system flake-utils;
           pkgs = nixpkgs.legacyPackages.${system};
           crane = inputs.crane.lib;
           fenix = inputs.fenix.packages;
         };
       in {
-        inherit (dailyChallengeBundle) packages apps devShells;
+        inherit (bundle) packages apps devShells;
       }
     );
 }

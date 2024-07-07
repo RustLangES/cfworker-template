@@ -4,7 +4,10 @@
 
 # Cloudflare Worker Template
 
-This is a template to get started with Cloudflare workers written in Rust .
+This is a template to get started with Cloudflare workers written in Rust.
+
+[![Use Template](https://github.com/RustLangES/cfworker-template/assets/56278796/f111456d-4385-4a22-9467-828354c5def3)](https://github.com/new?template_owner=RustLangES&template_name=cfworker-template&owner=%40me&name=cloudflare-worker&description=My+Super+Worker+written+in+Rust&visibility=public)
+
 
 ## Features
 - Only Rust, you don't need to write code in any other language.

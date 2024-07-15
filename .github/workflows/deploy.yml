@@ -38,7 +38,7 @@ jobs:
           cargo install worker-build
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
-        env:
+        # env:
           # YOUR_SECRET: ${{ secrets.YOUR_SECRET }}
           # YOUR_OTHER_SECRET: ${{ secrets.YOUR_OTHER_SECRET }}
         with:

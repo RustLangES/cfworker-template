@@ -1,0 +1,28 @@
+name: Quality Gate
+on:
+  workflow_call:
+    inputs:
+      checks-command:
+        required: true
+        type: string
+      clippy-command:
+        required: true
+        type: string
+      tests-command:
+        required: true
+        type: string
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/**/**.rs"
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  quality-gate:
+    uses: RustLangES/.github/.github/workflows/quality-gate.yml@main
+    with:
+      runs-on: ubuntu-latest
+      checks-command: ${{ inputs.checks-command }}
+      clippy-command: ${{ inputs.clippy-command }}
+      tests-command: ${{ inputs.tests-command }}

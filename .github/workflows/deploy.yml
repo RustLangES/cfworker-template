@@ -1,4 +1,4 @@
-name: Deploy to production
+name: Deploy to Cloudflare
 
 on:
   workflow_dispatch:
@@ -14,20 +14,16 @@ on:
       - "rust-toolchain.toml"
 
 jobs:
-  check:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - name: checks
-        run: |
-          cargo fmt --all --check
+  quality-gate:
+    uses: ./.github/workflows/quality-gate.yml
+    with:
+      checks-command: "--all --check"
+      clippy-command: "-- -D warnings"
+      tests-command: "test"
 
   deploy:
-    needs: [check]
-    runs-on: ubuntu-22.04
+    needs: [quality-gate]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4

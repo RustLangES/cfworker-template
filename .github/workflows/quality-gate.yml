@@ -16,11 +16,11 @@ on:
     paths:
       - "src/**/**.rs"
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: "0 0 1 * *"
 
 jobs:
   quality-gate:
-    uses: RustLangES/.github/.github/workflows/quality-gate.yml@main
+    uses: RustLangES/workflows/.github/workflows/quality-gate.yml@main
     with:
       runs-on: ubuntu-latest
       checks-command: ${{ inputs.checks-command }}

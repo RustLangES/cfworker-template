@@ -30,22 +30,18 @@ jobs:
       - name: Install nix
         uses: cachix/install-nix-action@v31
       - name: Build nix
-        run: nix build; ls
+        run: nix build
       - name: Fix up wrangler toml
-        run: 
-          echo "Before";
-          cat wrangler.toml;
+        working-directory: .
+        run: |
+          pwd
+          echo "---- Before"
           cat wrangler.toml
-          | sed 's/main = "build/main = "result/'
-          | sed 's/command = "worker-build --release"/command = "echo dummy build"/';
-          cat wrangler.toml | sed 's/main = "build/main = "result/' > mid.toml;
-          cat mid.toml;
-          cat wrangler.toml
-          | sed 's/main = "build/main = "result/'
-          | sed 's/command = "worker-build --release"/command = "echo dummy build"/'
-          > wrangler.toml;
-          echo "After";
-          cat wrangler.toml;
+          
+          cat wrangler.toml | sed 's/main = "build/main = "result/' | sed 's/command = "worker-build --release"/command = "echo dummy build"/' >| wrangler.prod.toml
+          
+          echo "---- After"
+          cat wrangler.prod.toml
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         # env:
@@ -55,6 +51,7 @@ jobs:
           wranglerVersion: "4.19.1"
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy -c wrangler.prod.toml
           # secrets: |
           #   YOUR_SECRET
           #   YOUR_OTHER_SECRET

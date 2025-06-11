@@ -30,14 +30,22 @@ jobs:
       - name: Install nix
         uses: cachix/install-nix-action@v31
       - name: Build nix
-        run: nix build
+        run: nix build; ls
       - name: Fix up wrangler toml
         run: 
+          echo "Before";
+          cat wrangler.toml;
+          cat wrangler.toml
+          | sed 's/main = "build/main = "result/'
+          | sed 's/command = "worker-build --release"/command = "echo dummy build"/';
+          cat wrangler.toml | sed 's/main = "build/main = "result/' > mid.toml;
+          cat mid.toml;
           cat wrangler.toml
           | sed 's/main = "build/main = "result/'
           | sed 's/command = "worker-build --release"/command = "echo dummy build"/'
           > wrangler.toml;
-          cat wrangler.toml
+          echo "After";
+          cat wrangler.toml;
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         # env:

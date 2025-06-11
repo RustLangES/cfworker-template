@@ -27,14 +27,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Install nix
-        uses: cachix/install-nix-action@v31
+        uses: nixbuild/nix-quick-install-action@v30
+        with:
+          nix_conf: |
+            keep-env-derivations = true
+            keep-outputs = true
+
+      - name: Restore and save Nix store
+        uses: nix-community/cache-nix-action@v6
+        with:
+          primary-key: build-${{ runner.os }}-${{ hashFiles('**/*.nix', 'flake.lock') }}
+          restore-prefixes-first-match: build-${{ runner.os }}-
+
       - name: Build nix
         run: nix build
+
       - name: Fix up wrangler toml
         working-directory: .
         run: |
-          pwd
           echo "---- Before"
           cat wrangler.toml
           
@@ -42,6 +54,7 @@ jobs:
           
           echo "---- After"
           cat wrangler.prod.toml
+
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         # env:

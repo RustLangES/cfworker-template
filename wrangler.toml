@@ -11,6 +11,9 @@ compatibility_date = "2025-06-10"
 [build]
 command = "worker-build --release"
 
+[observability]
+enabled = true
+
 [[rules]]
 globs = ["**/*.wasm"]
 type = "CompiledWasm"

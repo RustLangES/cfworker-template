@@ -1,7 +1,7 @@
 name = "cfworker-template"
 workers_dev = true
 main = "build/worker/shim.mjs"
-compatibility_date = "2024-03-14"
+compatibility_date = "2025-06-10"
 
 # Docs: https://developers.cloudflare.com/workers/configuration/routing/routes/
 # routes = [

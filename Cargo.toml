@@ -7,9 +7,9 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-worker = "0.3"
+worker = "0.5"
 # If you need a worker listening cloudflare queue
-# worker = { version = "0.3", features = ["queue"]}
+# worker = { version = "0.5", features = ["queue"]}
 # serde = { version = "1", features = ["serde_derive"] }
 
 # Remove commentary if you need
@@ -23,3 +23,6 @@ opt-level = "s"
 lto = true
 strip = true
 codegen-units = 1
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-O", "--enable-bulk-memory-opt"]

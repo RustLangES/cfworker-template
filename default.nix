@@ -1,20 +1,19 @@
 {
-  system,
   pkgs,
   lib ? pkgs.lib,
   stdenv ? pkgs.stdenv,
   crane,
   fenix,
-  flake-utils,
+  wrangler-fix,
   ...
 }: let
   # fenix: rustup replacement for reproducible builds
-  toolchain = fenix.${system}.fromToolchainFile {
+  toolchain = fenix.fromToolchainFile {
     file = ./rust-toolchain.toml;
-    sha256 = "sha256-opUgs6ckUQCyDxcB9Wy51pqhd0MPGHUVbwRKKPGiwZU=";
+    sha256 = "sha256-KUm16pHj+cRedf8vxs/Hd2YWxpOrWZ7UOrwhILdSJBU=";
   };
   # crane: cargo and artifacts manager
-  craneLib = crane.${system}.overrideToolchain toolchain;
+  craneLib = crane.overrideToolchain toolchain;
 
   nativeBuildInputs = with pkgs; [
     worker-build
@@ -27,18 +26,19 @@
     openssl
     pkg-config
     autoPatchelfHook
+    wrangler-fix.wrangler
   ]
   ++ lib.optionals stdenv.buildPlatform.isDarwin [
     pkgs.libiconv
   ];
-  # ++ lib.optionals stdenv.buildPlatform.isLinux [
-  #   pkgs.libxkbcommon.dev
-  # ];
 
   worker = craneLib.buildPackage {
     doCheck = false;
     src = craneLib.cleanCargoSource (craneLib.path ./.);
     buildPhaseCargoCommand = "HOME=$(mktemp -d fake-homeXXXX) worker-build --release --mode no-install";
+
+    # Custom build command is provided, so this should be enabled
+    doNotPostBuildInstallCargoBinaries = true;
 
     installPhaseCommand = ''
       cp -r ./build $out
@@ -57,7 +57,6 @@ in
 
   # `nix develop`
   devShells.default = craneLib.devShell {
-    buildInputs = nativeBuildInputs ++ buildInputs;
-    # pkgs.nodePackages.wrangler
+    packages = nativeBuildInputs ++ buildInputs;
   };
 }

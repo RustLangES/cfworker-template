@@ -27,17 +27,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - name: Install worker-build
-        run: |
-          cargo install worker-build
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+      - name: Build nix
+        run: nix build
+      - name: Fix up wrangler toml
+        run: 
+          cat wrangler.toml
+          | sed 's/main = "build/main = "result/'
+          | sed 's/command = "worker-build --release"/command = "echo dummy build"/'
+          > wrangler.toml;
+          cat wrangler.toml
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         # env:
           # YOUR_SECRET: ${{ secrets.YOUR_SECRET }}
           # YOUR_OTHER_SECRET: ${{ secrets.YOUR_OTHER_SECRET }}
         with:
+          wranglerVersion: "4.19.1"
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # secrets: |

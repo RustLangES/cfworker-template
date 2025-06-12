@@ -22,15 +22,15 @@
     binaryen
   ];
 
-  buildInputs = with pkgs; [
-    openssl
-    pkg-config
-    autoPatchelfHook
-    wrangler-fix.wrangler
-  ]
-  ++ lib.optionals stdenv.buildPlatform.isDarwin [
-    pkgs.libiconv
-  ];
+  buildInputs = with pkgs;
+    [
+      openssl
+      pkg-config
+      autoPatchelfHook
+    ]
+    ++ lib.optionals stdenv.buildPlatform.isDarwin [
+      pkgs.libiconv
+    ];
 
   worker = craneLib.buildPackage {
     doCheck = false;
@@ -44,19 +44,19 @@
       cp -r ./build $out
     '';
 
-    nativeBuildInputs = with pkgs; nativeBuildInputs ++ [
-      esbuild
-    ];
+    nativeBuildInputs = with pkgs; [esbuild] ++ nativeBuildInputs;
 
     inherit buildInputs;
   };
-in
-{
+in {
   # `nix build`
   packages.default = worker;
 
   # `nix develop`
   devShells.default = craneLib.devShell {
-    packages = nativeBuildInputs ++ buildInputs;
+    packages =
+      nativeBuildInputs
+      ++ buildInputs
+      ++ [wrangler-fix.wrangler];
   };
 }
